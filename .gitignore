@@ -1,0 +1,8 @@
+.idea/
+.idea/*
+
+/target/
+/target/*
+target/
+
+mobileHub-api.iml

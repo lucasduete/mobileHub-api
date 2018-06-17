@@ -1,7 +1,13 @@
 package io.github.lucasduete.mobileHubApi.controllers;
 
+import io.github.lucasduete.mobileHubApi.infraSecurity.TokenManagement;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.stream.JsonCollectors;
 import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
@@ -9,6 +15,8 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.StringReader;
+
 @Path("login")
 public class LoginController {
 
@@ -67,6 +75,16 @@ public class LoginController {
                 .header("Accept", MediaType.APPLICATION_JSON)
                 .post(null);
 
-        return response;
+        String jsonString = response.readEntity(String.class);
+        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
+        JsonObject jsonObject = jsonReader.readObject();
+
+        String token = gererateToken(jsonObject.getString("token"));
+
+        return Response.ok(token).build();
+    }
+
+    private String gererateToken(String githubToken) {
+        return new TokenManagement().gerarToken(githubToken, 316);
     }
 }

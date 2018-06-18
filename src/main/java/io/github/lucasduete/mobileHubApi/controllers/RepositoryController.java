@@ -28,8 +28,8 @@ public class RepositoryController {
     private static final String URL_BASE = MyApplication.URL_BASE;
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Security
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getMyRepos(@Context SecurityContext securityContext) {
 
         Client client = ClientBuilder
@@ -57,8 +57,9 @@ public class RepositoryController {
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Path("stars")
     @Security
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getMyStars(@Context SecurityContext securityContext) {
 
         Client client = ClientBuilder

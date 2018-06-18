@@ -43,8 +43,8 @@ public class LoginController {
     }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
     @Path("oauth2")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response oauth2() {
         return Response.ok(
                 String.format("https://github.com/login/oauth/authorize?client_id=%s", CLIENT_ID)
@@ -53,6 +53,7 @@ public class LoginController {
 
     @GET
     @Path("authorize")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response oauth2Authorize(@QueryParam("code") String code) {
 
         Client client = ClientBuilder

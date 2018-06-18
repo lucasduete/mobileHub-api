@@ -10,6 +10,8 @@ import javax.ws.rs.ApplicationPath;
 @ApplicationPath("rest")
 public class MyApplication extends ResourceConfig {
 
+    public static final String URL_BASE = "https://api.github.com/";
+
     public MyApplication() {
         //Scaneia Dinamicamente pelos Controllers (classes com @Path)
         packages("io.github.lucasduete.mobileHubApi.controllers");

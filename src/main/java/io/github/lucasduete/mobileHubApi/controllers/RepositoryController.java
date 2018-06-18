@@ -1,5 +1,6 @@
 package io.github.lucasduete.mobileHubApi.controllers;
 
+import io.github.lucasduete.mobileHubApi.MyApplication;
 import io.github.lucasduete.mobileHubApi.infraSecurity.Security;
 import io.github.lucasduete.mobileHubApi.infraSecurity.TokenManagement;
 
@@ -24,7 +25,7 @@ import java.io.StringReader;
 @Path("repositories")
 public class RepositoryController {
 
-    private static final String URL_BASE = "https://api.github.com/";
+    private static final String URL_BASE = MyApplication.URL_BASE;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

@@ -2,9 +2,11 @@ package io.github.lucasduete.mobileHubApi.controllers;
 
 import io.github.lucasduete.mobileHubApi.infraSecurity.Security;
 import io.github.lucasduete.mobileHubApi.infraSecurity.TokenManagement;
-import org.glassfish.jersey.process.internal.RequestContext;
 
-import javax.json.*;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.json.stream.JsonCollectors;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -18,7 +20,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.io.StringReader;
-import java.util.stream.Stream;
 
 @Path("repositories")
 public class RepositoryController {

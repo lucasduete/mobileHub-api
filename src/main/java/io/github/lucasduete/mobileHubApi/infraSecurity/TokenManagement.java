@@ -50,7 +50,7 @@ public class TokenManagement {
                     .setSigningKey(DatatypeConverter.parseBase64Binary(SECRETKEY))
                     .parseClaimsJws(token).getBody();
             return claims;
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             throw ex;
         }
     }

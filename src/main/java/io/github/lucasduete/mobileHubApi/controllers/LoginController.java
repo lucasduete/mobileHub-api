@@ -4,11 +4,8 @@ import io.github.lucasduete.mobileHubApi.infraSecurity.TokenManagement;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import javax.json.stream.JsonCollectors;
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;

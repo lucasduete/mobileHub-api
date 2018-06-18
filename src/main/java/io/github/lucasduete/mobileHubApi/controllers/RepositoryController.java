@@ -56,6 +56,35 @@ public class RepositoryController {
     }
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Security
+    public Response getMyStars(@Context SecurityContext securityContext) {
+
+        Client client = ClientBuilder
+                .newBuilder()
+                .build();
+
+        WebTarget webTarget = client.target(URL_BASE)
+                .path("user")
+                .path("starred");
+
+        Response response = webTarget
+                .request()
+                .header("Accept", "application/json, application/vnd.github.v3+json")
+                .header("Authorization", String.format("bearer %s", TokenManagement.getToken(securityContext)))
+                .get();
+
+        String jsonString = response.readEntity(String.class);
+        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
+        JsonArray jsonArray = jsonReader.readArray();
+
+        System.out.printf("\n\n TAMANHO: " + jsonArray.size());
+
+        jsonArray = jsonArray.stream().limit(10).collect(JsonCollectors.toJsonArray());
+        return Response.ok(jsonArray).build();
+    }
+
+    @GET
     @Path("search")
     @Produces(MediaType.APPLICATION_JSON)
     public Response search(@QueryParam("keyword") String keyword) {

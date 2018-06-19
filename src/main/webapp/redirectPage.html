@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Redirect Page</title>
+    </head>
+    <body onload="callIntent()">
+
+    </body>
+    <script type="text/javascript">
+        function callIntent() {
+            // window.location = "schemeName://hostname/path?value1=1&value2=2";
+
+            var code = location.search.split("code=")[1];
+            window.location = "mobilehub.login.oauth2://mobilehub-api.herokuapp.com/login?code=" + code;
+        }
+    </script>
+</html>

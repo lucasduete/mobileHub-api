@@ -2,6 +2,7 @@ package io.github.lucasduete.mobileHubApi.controllers;
 
 import io.github.lucasduete.mobileHubApi.infraSecurity.TokenManagement;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.glassfish.jersey.server.Uri;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -12,7 +13,12 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import java.io.File;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @Path("login")
 public class LoginController {
@@ -49,6 +55,26 @@ public class LoginController {
         return Response.ok(
                 String.format("https://github.com/login/oauth/authorize?client_id=%s", CLIENT_ID)
         ).build();
+    }
+
+    @GET
+    @Path("redirect")
+    @Produces(MediaType.TEXT_HTML)
+    public Response redirectOauth(@QueryParam("code") String code) {
+
+        URI uri = null;
+
+        try {
+            uri = new URI(
+                    String.format("https://mobilehub-api.herokuapp.com/redirectPage.html?code=%s", code)
+            );
+        } catch (URISyntaxException ex) {
+            ex.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+        System.out.printf("\n\n%s", uri.toString());
+
+        return Response.seeOther(uri).build();
     }
 
     @GET

@@ -79,7 +79,7 @@ public class LoginController {
 
     @GET
     @Path("authorize")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response oauth2Authorize(@QueryParam("code") String code) {
 
         if (code == null || code.isEmpty()) 

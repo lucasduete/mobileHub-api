@@ -117,8 +117,8 @@ public class RepositoryController {
         System.out.printf("\n\n TAMANHO: " + jsonObject.getInt("total_count"));
 
         JsonArray jsonArray = jsonObject.getJsonArray("items");
-        jsonArray = jsonArray.stream().limit(10).collect(JsonCollectors.toJsonArray());
+        JsonArray jsonValues = jsonArray.stream().limit(10).collect(JsonCollectors.toJsonArray());
 
-        return Response.ok(jsonArray).build();
+        return Response.ok(jsonValues).build();
     }
 }

@@ -106,7 +106,7 @@ public class LoginController {
         JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
         JsonObject jsonObject = jsonReader.readObject();
 
-        String token = gererateToken(jsonObject.getString("token"));
+        String token = gererateToken(jsonObject.getString("access_token"));
 
         return Response.ok(token).build();
     }

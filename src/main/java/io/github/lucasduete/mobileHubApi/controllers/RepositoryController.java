@@ -46,14 +46,16 @@ public class RepositoryController {
                 .header("Authorization", String.format("bearer %s", TokenManagement.getToken(securityContext)))
                 .get();
 
-        String jsonString = response.readEntity(String.class);
-        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
-        JsonArray jsonArray = jsonReader.readArray();
+        return response;
 
-        System.out.printf("\n\n TAMANHO: " + jsonArray.size());
-
-        jsonArray = jsonArray.stream().limit(10).collect(JsonCollectors.toJsonArray());
-        return Response.ok(jsonArray).build();
+//        String jsonString = response.readEntity(String.class);
+//        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
+//        JsonArray jsonArray = jsonReader.readArray();
+//
+//        System.out.printf("\n\n TAMANHO: " + jsonArray.size());
+//
+//        jsonArray = jsonArray.stream().limit(10).collect(JsonCollectors.toJsonArray());
+//        return Response.ok(jsonArray).build();
     }
 
     @GET
@@ -76,14 +78,16 @@ public class RepositoryController {
                 .header("Authorization", String.format("bearer %s", TokenManagement.getToken(securityContext)))
                 .get();
 
-        String jsonString = response.readEntity(String.class);
-        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
-        JsonArray jsonArray = jsonReader.readArray();
+        return response;
 
-        System.out.printf("\n\n TAMANHO: " + jsonArray.size());
-
-        jsonArray = jsonArray.stream().limit(10).collect(JsonCollectors.toJsonArray());
-        return Response.ok(jsonArray).build();
+//        String jsonString = response.readEntity(String.class);
+//        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
+//        JsonArray jsonArray = jsonReader.readArray();
+//
+//        System.out.printf("\n\n TAMANHO: " + jsonArray.size());
+//
+//        jsonArray = jsonArray.stream().limit(10).collect(JsonCollectors.toJsonArray());
+//        return Response.ok(jsonArray).build();
     }
 
     @GET
@@ -110,15 +114,17 @@ public class RepositoryController {
                 .header("Accept", "application/json, application/vnd.github.v3.text-match+json")
                 .get();
 
-        String jsonString = response.readEntity(String.class);
-        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
-        JsonObject jsonObject = jsonReader.readObject();
+        return response;
 
-        System.out.printf("\n\n TAMANHO: " + jsonObject.getInt("total_count"));
+//        String jsonString = response.readEntity(String.class);
+//        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
+//        JsonObject jsonObject = jsonReader.readObject();
+//
+//        System.out.printf("\n\n TAMANHO: " + jsonObject.getInt("total_count"));
+//
+//        JsonArray jsonArray = jsonObject.getJsonArray("items");
+//        JsonArray jsonValues = jsonArray.stream().limit(10).collect(JsonCollectors.toJsonArray());
 
-        JsonArray jsonArray = jsonObject.getJsonArray("items");
-        JsonArray jsonValues = jsonArray.stream().limit(10).collect(JsonCollectors.toJsonArray());
-
-        return Response.ok(jsonValues).build();
+//        return Response.ok(jsonValues).build();
     }
 }

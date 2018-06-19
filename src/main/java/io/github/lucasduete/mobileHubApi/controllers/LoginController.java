@@ -82,6 +82,9 @@ public class LoginController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response oauth2Authorize(@QueryParam("code") String code) {
 
+        if (code == null || code.isEmpty()) 
+            return Response.status(Response.Status.BAD_REQUEST).build();
+
         Client client = ClientBuilder
                 .newBuilder()
                 .build();

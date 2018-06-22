@@ -2,7 +2,6 @@ package io.github.lucasduete.mobileHubApi.controllers;
 
 import io.github.lucasduete.mobileHubApi.infraSecurity.TokenManagement;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
-import org.glassfish.jersey.server.Uri;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -13,9 +12,6 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import java.io.File;
-import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -82,7 +78,7 @@ public class LoginController {
     @Produces(MediaType.TEXT_PLAIN)
     public Response oauth2Authorize(@QueryParam("code") String code) {
 
-        if (code == null || code.isEmpty()) 
+        if (code == null || code.isEmpty())
             return Response.status(Response.Status.BAD_REQUEST).build();
 
         Client client = ClientBuilder

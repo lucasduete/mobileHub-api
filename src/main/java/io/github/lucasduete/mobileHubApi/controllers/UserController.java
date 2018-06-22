@@ -49,5 +49,5 @@ public class UserController {
 
         return Response.ok(jsonObject).build();
     }
-    
+
 }

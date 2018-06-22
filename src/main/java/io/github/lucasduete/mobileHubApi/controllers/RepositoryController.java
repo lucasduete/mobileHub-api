@@ -48,16 +48,14 @@ public class RepositoryController {
                 .header("Authorization", String.format("bearer %s", TokenManagement.getToken(securityContext)))
                 .get();
 
-        return response;
+        try {
+            List<Repository> repositories = recuperarRepositorios(response);
+            return Response.ok(repositories).build();
 
-//        String jsonString = response.readEntity(String.class);
-//        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
-//        JsonArray jsonArray = jsonReader.readArray();
-//
-//        System.out.printf("\n\n TAMANHO: " + jsonArray.size());
-//
-//        jsonArray = jsonArray.stream().limit(10).collect(JsonCollectors.toJsonArray());
-//        return Response.ok(jsonArray).build();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GET
@@ -80,16 +78,14 @@ public class RepositoryController {
                 .header("Authorization", String.format("bearer %s", TokenManagement.getToken(securityContext)))
                 .get();
 
-        return response;
+        try {
+            List<Repository> repositories = recuperarRepositorios(response);
+            return Response.ok(repositories).build();
 
-//        String jsonString = response.readEntity(String.class);
-//        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
-//        JsonArray jsonArray = jsonReader.readArray();
-//
-//        System.out.printf("\n\n TAMANHO: " + jsonArray.size());
-//
-//        jsonArray = jsonArray.stream().limit(10).collect(JsonCollectors.toJsonArray());
-//        return Response.ok(jsonArray).build();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GET
@@ -116,29 +112,34 @@ public class RepositoryController {
                 .header("Accept", "application/json, application/vnd.github.v3.text-match+json")
                 .get();
 
-        String jsonString = response.readEntity(String.class);
-        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
-        JsonObject jsonObject = jsonReader.readObject();
-
-        System.out.printf("\n\n TAMANHO: " + jsonObject.getInt("total_count"));
-        
-        JsonArray jsonArray = jsonObject
-                .getJsonArray("items")
-                .stream()
-                .limit(10)
-                .collect(JsonCollectors.toJsonArray());
-
-        List<Repository> repositories = new ArrayList<>();
-
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            repositories = Arrays.asList(mapper.readValue(jsonArray.toString(), Repository[].class));
+            List<Repository> repositories = recuperarRepositorios(response);
+            return Response.ok(repositories).build();
 
         } catch (IOException ex) {
             ex.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
+    }
 
-        return Response.ok(repositories).build();
+    private List<Repository> recuperarRepositorios(Response response) throws IOException {
+        JsonArray jsonArray = recuperarJsonArray(response);
+
+        ObjectMapper mapper = new ObjectMapper();
+        return Arrays.asList(mapper.readValue(jsonArray.toString(), Repository[].class));
+    }
+
+    private JsonArray recuperarJsonArray(Response response) {
+        String jsonString = response.readEntity(String.class);
+        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
+        JsonObject jsonObject = jsonReader.readObject();
+
+        System.out.printf("\n\n TAMANHO: " + jsonObject.getInt("total_count"));
+
+        return jsonObject
+                .getJsonArray("items")
+                .stream()
+                .limit(10)
+                .collect(JsonCollectors.toJsonArray());
     }
 }

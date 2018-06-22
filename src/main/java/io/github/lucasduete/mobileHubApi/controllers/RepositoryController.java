@@ -1,14 +1,15 @@
 package io.github.lucasduete.mobileHubApi.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.lucasduete.mobileHubApi.MyApplication;
+import io.github.lucasduete.mobileHubApi.entities.Repository;
 import io.github.lucasduete.mobileHubApi.infraSecurity.Security;
 import io.github.lucasduete.mobileHubApi.infraSecurity.TokenManagement;
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import javax.json.*;
 import javax.json.stream.JsonCollectors;
+import javax.json.stream.JsonParser;
+import javax.json.stream.JsonParserFactory;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -16,11 +17,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.*;
+import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Path("repositories")
 public class RepositoryController {
@@ -114,17 +116,29 @@ public class RepositoryController {
                 .header("Accept", "application/json, application/vnd.github.v3.text-match+json")
                 .get();
 
-        return response;
+        String jsonString = response.readEntity(String.class);
+        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
+        JsonObject jsonObject = jsonReader.readObject();
 
-//        String jsonString = response.readEntity(String.class);
-//        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
-//        JsonObject jsonObject = jsonReader.readObject();
-//
-//        System.out.printf("\n\n TAMANHO: " + jsonObject.getInt("total_count"));
-//
-//        JsonArray jsonArray = jsonObject.getJsonArray("items");
-//        JsonArray jsonValues = jsonArray.stream().limit(10).collect(JsonCollectors.toJsonArray());
+        System.out.printf("\n\n TAMANHO: " + jsonObject.getInt("total_count"));
+        
+        JsonArray jsonArray = jsonObject
+                .getJsonArray("items")
+                .stream()
+                .limit(10)
+                .collect(JsonCollectors.toJsonArray());
 
-//        return Response.ok(jsonValues).build();
+        List<Repository> repositories = new ArrayList<>();
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            repositories = Arrays.asList(mapper.readValue(jsonArray.toString(), Repository[].class));
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        return Response.ok(repositories).build();
     }
 }

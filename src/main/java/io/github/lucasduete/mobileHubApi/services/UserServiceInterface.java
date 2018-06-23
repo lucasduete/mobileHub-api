@@ -7,5 +7,6 @@ import java.io.IOException;
 public interface UserServiceInterface {
 
     public User getProfile(String token) throws IOException;
+
     public User getUser(String username) throws IOException;
 }

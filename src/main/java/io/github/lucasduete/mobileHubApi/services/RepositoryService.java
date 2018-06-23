@@ -47,12 +47,34 @@ public class RepositoryService implements RepositoryServiceInterface {
 
     @Override
     public List<Repository> getMyStars(String token) throws IOException {
-        return null;
+
+        Response response = target
+                .path("user")
+                .path("starred")
+                .request()
+                .header("Accept", "application/json, application/vnd.github.v3+json")
+                .header("Authorization", String.format("bearer %s", token))
+                .get();
+
+        return recuperarRepositorios(response);
+
     }
 
     @Override
     public List<Repository> search(String keyword) throws IOException {
-        return null;
+
+        Response response = target
+                .path("search")
+                .path("repositories")
+                .queryParam("q", keyword)
+                .queryParam("sort", "stars")
+                .queryParam("order", "desc")
+                .request()
+                .header("Accept", "application/json, application/vnd.github.v3.text-match+json")
+                .get();
+
+        return recuperarRepositorios(response);
+
     }
 
     private List<Repository> recuperarRepositorios(Response response) throws IOException {

@@ -80,7 +80,6 @@ public class User {
         return quantEstrelas;
     }
 
-    @JsonSetter("")
     public void setQuantEstrelas(int quantEstrelas) {
         this.quantEstrelas = quantEstrelas;
     }
@@ -102,4 +101,5 @@ public class User {
     public void setQuantSeguindo(int quantSeguindo) {
         this.quantSeguindo = quantSeguindo;
     }
+
 }

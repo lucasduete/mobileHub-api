@@ -3,7 +3,6 @@ package io.github.lucasduete.mobileHubApi.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.lucasduete.mobileHubApi.MyApplication;
 import io.github.lucasduete.mobileHubApi.entities.User;
-import io.github.lucasduete.mobileHubApi.infraSecurity.TokenManagement;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -12,11 +11,8 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
-import java.awt.image.ImagingOpException;
 import java.io.IOException;
 import java.io.StringReader;
-import java.lang.annotation.Target;
-import java.sql.SQLException;
 
 public class UserService implements UserServiceInterface {
 
@@ -26,14 +22,14 @@ public class UserService implements UserServiceInterface {
         Client client = ClientBuilder.newClient();
 
         this.target = client
-                .target(MyApplication.URL_BASE)
-                .path("user");
+                .target(MyApplication.URL_BASE);
     }
 
     @Override
     public User getProfile(String token) throws IOException {
 
         Response response = target
+                .path("user")
                 .request()
                 .header("Accept", "application/json, application/vnd.github.v3+json")
                 .header("Authorization", String.format("bearer %s", token))
@@ -44,7 +40,14 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public User getUser(String username) throws IOException {
-        return null;
+        Response response = target
+                .path("user")
+                .path(username)
+                .request()
+                .header("Accept", "application/json, application/vnd.github.v3+json")
+                .get();
+
+        return recuperarUsuario(response);
     }
 
     private User recuperarUsuario(Response response) throws IOException {

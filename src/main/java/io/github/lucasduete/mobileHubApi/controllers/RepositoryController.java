@@ -1,6 +1,5 @@
 package io.github.lucasduete.mobileHubApi.controllers;
 
-import io.github.lucasduete.mobileHubApi.MyApplication;
 import io.github.lucasduete.mobileHubApi.infraSecurity.Security;
 import io.github.lucasduete.mobileHubApi.infraSecurity.TokenManagement;
 import io.github.lucasduete.mobileHubApi.services.RepositoryService;
@@ -18,8 +17,6 @@ import java.io.IOException;
 
 @Path("repositories")
 public class RepositoryController {
-
-    private static final String URL_BASE = MyApplication.URL_BASE;
 
     @GET
     @Security

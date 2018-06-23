@@ -1,8 +1,9 @@
-package io.github.lucasduete.mobileHubApi.services;
+package io.github.lucasduete.mobileHubApi.services.implementations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.lucasduete.mobileHubApi.MyApplication;
 import io.github.lucasduete.mobileHubApi.entities.User;
+import io.github.lucasduete.mobileHubApi.services.interfaces.UserServiceInterface;
 
 import javax.json.Json;
 import javax.json.JsonObject;

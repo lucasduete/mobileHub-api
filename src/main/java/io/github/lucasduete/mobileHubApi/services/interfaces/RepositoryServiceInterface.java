@@ -1,4 +1,4 @@
-package io.github.lucasduete.mobileHubApi.services;
+package io.github.lucasduete.mobileHubApi.services.interfaces;
 
 import io.github.lucasduete.mobileHubApi.entities.Repository;
 

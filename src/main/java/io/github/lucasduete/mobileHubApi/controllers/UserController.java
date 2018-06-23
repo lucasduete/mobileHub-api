@@ -2,8 +2,8 @@ package io.github.lucasduete.mobileHubApi.controllers;
 
 import io.github.lucasduete.mobileHubApi.infraSecurity.Security;
 import io.github.lucasduete.mobileHubApi.infraSecurity.TokenManagement;
-import io.github.lucasduete.mobileHubApi.services.UserService;
-import io.github.lucasduete.mobileHubApi.services.UserServiceInterface;
+import io.github.lucasduete.mobileHubApi.services.implementations.UserService;
+import io.github.lucasduete.mobileHubApi.services.interfaces.UserServiceInterface;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

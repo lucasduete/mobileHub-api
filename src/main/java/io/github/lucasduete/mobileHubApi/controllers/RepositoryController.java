@@ -67,7 +67,7 @@ public class RepositoryController {
 
         try {
             return Response.ok(
-                    repositoryService.getMyStars(keyword)
+                    repositoryService.search(keyword)
             ).build();
         } catch (IOException ex) {
             ex.printStackTrace();

@@ -1,5 +1,6 @@
 package io.github.lucasduete.mobileHubApi.entities;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
@@ -13,7 +14,6 @@ public class Repository {
     private String nomeAutor;
     private String descricao;
 
-
     public Repository() {
 
     }
@@ -25,6 +25,7 @@ public class Repository {
         this.descricao = descricao;
     }
 
+    @JsonGetter("nome")
     public String getNome() {
         return nome;
     }
@@ -34,6 +35,7 @@ public class Repository {
         this.nome = nome;
     }
 
+    @JsonGetter("fotoAutor")
     public String getFotoAutor() {
         return fotoAutor;
     }
@@ -42,6 +44,7 @@ public class Repository {
         this.fotoAutor = fotoAutor;
     }
 
+    @JsonGetter("nomeAutor")
     public String getNomeAutor() {
         return nomeAutor;
     }
@@ -50,6 +53,7 @@ public class Repository {
         this.nomeAutor = nomeAutor;
     }
 
+    @JsonGetter("descricao")
     public String getDescricao() {
         return descricao;
     }

@@ -38,6 +38,7 @@ public class IssueService implements IssueServiceInterface {
                 .path("issues")
                 .path(String.valueOf(issueNumber))
                 .request()
+                .header("Accept", "application/json, application/vnd.github.v3+json")
                 .get();
 
         return recuperaIssue(response);
@@ -54,6 +55,7 @@ public class IssueService implements IssueServiceInterface {
                 .queryParam("sort", "created")
                 .queryParam("direction", "desc")
                 .request()
+                .header("Accept", "application/json, application/vnd.github.v3+json")
                 .get();
 
         return recuperaIssues(response);

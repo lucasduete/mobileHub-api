@@ -1,5 +1,6 @@
 package io.github.lucasduete.mobileHubApi.entities;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
@@ -31,6 +32,7 @@ public class User {
         this.quantSeguindo = quantSeguindo;
     }
 
+    @JsonGetter("nome")
     public String getNome() {
         return nome;
     }
@@ -49,6 +51,7 @@ public class User {
         this.foto = foto;
     }
 
+    @JsonGetter("username")
     public String getUsername() {
         return username;
     }
@@ -58,6 +61,7 @@ public class User {
         this.username = username;
     }
 
+    @JsonGetter("biografia")
     public String getBiografia() {
         return biografia;
     }
@@ -67,6 +71,7 @@ public class User {
         this.biografia = biografia;
     }
 
+    @JsonGetter("quantRepositorios")
     public int getQuantRepositorios() {
         return quantRepositorios;
     }
@@ -84,6 +89,7 @@ public class User {
         this.quantEstrelas = quantEstrelas;
     }
 
+    @JsonGetter("quantSeguidores")
     public int getQuantSeguidores() {
         return quantSeguidores;
     }
@@ -93,6 +99,7 @@ public class User {
         this.quantSeguidores = quantSeguidores;
     }
 
+    @JsonGetter("quantSeguindo")
     public int getQuantSeguindo() {
         return quantSeguindo;
     }

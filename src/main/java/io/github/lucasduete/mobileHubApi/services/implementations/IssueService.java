@@ -16,7 +16,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -71,7 +70,7 @@ public class IssueService implements IssueServiceInterface {
         JsonArray jsonArray = recuperarJsonArray(response);
 
         ObjectMapper mapper = new ObjectMapper();
-        return Arrays.asList(mapper.readValue(jsonArray.toString(), Issue[].class)) ;
+        return Arrays.asList(mapper.readValue(jsonArray.toString(), Issue[].class));
     }
 
     private JsonObject recuperarJsonObject(Response response) {

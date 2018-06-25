@@ -64,7 +64,7 @@ public class Repository {
     }
 
     @JsonSetter("owner")
-    public void setNomeAutor(Map<String, String> owner) {
+    public void setAutor(Map<String, String> owner) {
         this.setNomeAutor(owner.get("login"));
         this.setFotoAutor(owner.get("avatar_url"));
     }

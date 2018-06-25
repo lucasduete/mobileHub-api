@@ -1,6 +1,8 @@
 package io.github.lucasduete.mobileHubApi.controllers;
 
 import io.github.lucasduete.mobileHubApi.MyApplication;
+import io.github.lucasduete.mobileHubApi.services.implementations.IssueService;
+import io.github.lucasduete.mobileHubApi.services.interfaces.IssueServiceInterface;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -15,6 +17,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.io.StringReader;
 
 @Path("issues")
@@ -27,32 +30,20 @@ public class IssueController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getIssuesByRepo(@QueryParam("owner") String owner, @QueryParam("repo") String repo) {
 
-        Client client = ClientBuilder
-                .newBuilder()
-                .build();
+        if (owner == null || owner.isEmpty() || repo == null || repo.isEmpty())
+            return Response.status(Response.Status.BAD_REQUEST).build();
 
-        WebTarget target = client
-                .target(URL_BASE)
-                .path("repos")
-                .path(owner)
-                .path(repo)
-                .path("issues");
+        String repository = String.format("%s/%s", owner, repo);
+        IssueServiceInterface issueService = new IssueService();
 
-        Response response = target
-                .queryParam("state", "open")
-                .queryParam("sort", "comments")
-                .queryParam("direction", "desc")
-                .request()
-                .get();
-
-        String jsonString = response.readEntity(String.class);
-        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
-        JsonArray jsonArray = jsonReader.readArray();
-
-        System.out.printf("\n\n TAMANHO: " + jsonArray.size());
-
-        jsonArray = jsonArray.stream().limit(10).collect(JsonCollectors.toJsonArray());
-        return Response.ok(jsonArray).build();
+        try {
+            return Response.ok(
+                    issueService.getIssuesByRepo(repository)
+            ).build();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GET
@@ -60,31 +51,21 @@ public class IssueController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSingleIssue(@QueryParam("owner") String owner,
                                    @QueryParam("repo") String repo,
-                                   @QueryParam("number") String number) {
+                                   @QueryParam("number") int number) {
 
-        Client client = ClientBuilder
-                .newBuilder()
-                .build();
+        if (owner == null || owner.isEmpty() || repo == null || repo.isEmpty() || number >= 0)
+            return Response.status(Response.Status.BAD_REQUEST).build();
 
-        WebTarget target = client
-                .target(URL_BASE)
-                .path("repos")
-                .path(owner)
-                .path(repo)
-                .path("issues")
-                .path(number);
+        String repository = String.format("%s/%s", owner, repo);
+        IssueServiceInterface issueService = new IssueService();
 
-        Response response = target
-                .request()
-                .get();
-
-        String jsonString = response.readEntity(String.class);
-        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
-        JsonArray jsonArray = jsonReader.readArray();
-
-        System.out.printf("\n\n TAMANHO: " + jsonArray.size());
-
-        jsonArray = jsonArray.stream().limit(10).collect(JsonCollectors.toJsonArray());
-        return Response.ok(jsonArray).build();
+        try {
+            return Response.ok(
+                    issueService.getIssue(repository, number)
+            ).build();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

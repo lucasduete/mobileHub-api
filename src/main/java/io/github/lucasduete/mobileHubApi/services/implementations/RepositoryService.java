@@ -73,7 +73,7 @@ public class RepositoryService implements RepositoryServiceInterface {
                 .header("Accept", "application/json, application/vnd.github.v3.text-match+json")
                 .get();
 
-        return recuperarRepositorios(response);
+        return recuperarRepositoriosBusca(response);
 
     }
 
@@ -84,7 +84,27 @@ public class RepositoryService implements RepositoryServiceInterface {
         return Arrays.asList(mapper.readValue(jsonArray.toString(), Repository[].class));
     }
 
+    private List<Repository> recuperarRepositoriosBusca(Response response) throws IOException {
+        JsonArray jsonArray = recuperarJsonArrayBusca(response);
+
+        ObjectMapper mapper = new ObjectMapper();
+        return Arrays.asList(mapper.readValue(jsonArray.toString(), Repository[].class));
+    }
+
     private JsonArray recuperarJsonArray(Response response) {
+        String jsonString = response.readEntity(String.class);
+        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
+        JsonArray jsonArray = jsonReader.readArray();
+
+        System.out.printf("\n\n TAMANHO: " + jsonArray.size());
+
+        return jsonArray
+                .stream()
+                .limit(10)
+                .collect(JsonCollectors.toJsonArray());
+    }
+
+    private JsonArray recuperarJsonArrayBusca(Response response) {
         String jsonString = response.readEntity(String.class);
         JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
         JsonObject jsonObject = jsonReader.readObject();

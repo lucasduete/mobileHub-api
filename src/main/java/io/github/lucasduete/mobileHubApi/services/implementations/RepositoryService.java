@@ -100,7 +100,7 @@ public class RepositoryService implements RepositoryServiceInterface {
 
         return jsonArray
                 .stream()
-                .limit(10)
+//                .limit(10)
                 .collect(JsonCollectors.toJsonArray());
     }
 

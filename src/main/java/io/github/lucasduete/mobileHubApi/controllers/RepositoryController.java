@@ -5,10 +5,7 @@ import io.github.lucasduete.mobileHubApi.infraSecurity.TokenManagement;
 import io.github.lucasduete.mobileHubApi.services.implementations.RepositoryService;
 import io.github.lucasduete.mobileHubApi.services.interfaces.RepositoryServiceInterface;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -17,6 +14,24 @@ import java.io.IOException;
 
 @Path("repositories")
 public class RepositoryController {
+
+    @GET
+    @Path("{owner}/{repo}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSingleRepo(@PathParam("owner") String owner, @PathParam("repo") String repo) {
+
+        RepositoryServiceInterface repositoryService = new RepositoryService();
+
+        try {
+            return Response.ok(
+                    repositoryService.getSingleRepo(owner, repo)
+            ).build();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+    }
 
     @GET
     @Security

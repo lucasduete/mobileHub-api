@@ -31,6 +31,20 @@ public class RepositoryService implements RepositoryServiceInterface {
     }
 
     @Override
+    public Repository getSingleRepo(String owner, String repo) throws IOException {
+
+        Response response = target
+                .path("repos")
+                .path(owner)
+                .path(repo)
+                .request()
+                .header("Accept", "application/json, application/vnd.github.v3+json")
+                .get();
+
+        return recuperarRepositorio(response);
+    }
+
+    @Override
     public List<Repository> getMyRepos(String token) throws IOException {
 
         Response response = target
@@ -75,6 +89,15 @@ public class RepositoryService implements RepositoryServiceInterface {
 
         return recuperarRepositoriosBusca(response);
 
+    }
+
+    private Repository recuperarRepositorio(Response response) throws IOException {
+        String jsonString = response.readEntity(String.class);
+        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
+        JsonObject jsonObject = jsonReader.readObject();
+
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(jsonObject.toString(), Repository.class);
     }
 
     private List<Repository> recuperarRepositorios(Response response) throws IOException {

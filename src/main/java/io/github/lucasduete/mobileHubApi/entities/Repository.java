@@ -9,6 +9,8 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Repository {
 
+    private int forks;
+    private int stars;
     private String nome;
     private String fotoAutor;
     private String nomeAutor;
@@ -18,7 +20,9 @@ public class Repository {
 
     }
 
-    public Repository(String nome, String fotoAutor, String nomeAutor, String descricao) {
+    public Repository(int forks, int stars, String nome, String fotoAutor, String nomeAutor, String descricao) {
+        this.forks = forks;
+        this.stars = stars;
         this.nome = nome;
         this.fotoAutor = fotoAutor;
         this.nomeAutor = nomeAutor;
@@ -67,5 +71,25 @@ public class Repository {
     public void setAutor(Map<String, String> owner) {
         this.setNomeAutor(owner.get("login"));
         this.setFotoAutor(owner.get("avatar_url"));
+    }
+
+    @JsonGetter("forks")
+    public int getForks() {
+        return forks;
+    }
+
+    @JsonSetter("forks")
+    public void setForks(int forks) {
+        this.forks = forks;
+    }
+
+    @JsonGetter("stars")
+    public int getStars() {
+        return stars;
+    }
+
+    @JsonSetter("stargazers_count")
+    public void setStars(int stars) {
+        this.stars = stars;
     }
 }

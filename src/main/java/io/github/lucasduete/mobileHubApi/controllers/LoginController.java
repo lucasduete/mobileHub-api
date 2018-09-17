@@ -9,12 +9,14 @@ import javax.json.JsonReader;
 import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 
 @Path("login")
 public class LoginController {
@@ -24,6 +26,8 @@ public class LoginController {
 
     @POST
     @Path("basic/")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response basic(@FormParam("username") String username, @FormParam("password") String password) {
 
         HttpAuthenticationFeature authenticationFeature = HttpAuthenticationFeature.basic(username, password);
@@ -34,14 +38,26 @@ public class LoginController {
                 .register(authenticationFeature)
                 .build();
 
-        WebTarget webTarget = client.target("https://api.github.com").path("user");
+        WebTarget webTarget = client.target("https://api.github.com").path("authorizations");
 
-        Response response = webTarget.request().get();
+        Response response = webTarget
+                .request()
+                .post(
+                        Entity.json(
+                                "{\"note\": \" " + Instant.now().toEpochMilli() + " \"}"
+                        )
+                );
 
-        System.out.println(response.getStatus());
-        System.out.println(response.getEntity());
+        if (response.getStatus() != Response.Status.CREATED.getStatusCode())
+            return Response.status(Response.Status.UNAUTHORIZED).build();
 
-        return response;
+        String jsonString = response.readEntity(String.class);
+        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
+        JsonObject jsonObject = jsonReader.readObject();
+
+        return Response.ok(
+                jsonObject.getString("token")
+        ).build();
     }
 
     @GET
@@ -110,4 +126,5 @@ public class LoginController {
     private String gererateToken(String githubToken) {
         return new TokenManagement().gerarToken(githubToken, 316);
     }
+
 }

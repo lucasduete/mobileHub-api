@@ -11,6 +11,7 @@ import io.github.lucasduete.mobileHubApi.controllers.Feed;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AtomConsumer {
@@ -41,6 +42,6 @@ public class AtomConsumer {
             feedData.setAvatarUrl(avatar);
         }
 
-        return feedList;
+        return Collections.unmodifiableList(feedList);
     }
 }

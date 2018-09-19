@@ -1,10 +1,12 @@
 package io.github.lucasduete.mobileHubApi.controllers;
 
+import com.sun.syndication.io.FeedException;
 import io.github.lucasduete.mobileHubApi.MyApplication;
 import io.github.lucasduete.mobileHubApi.infraSecurity.Security;
 import io.github.lucasduete.mobileHubApi.infraSecurity.TokenManagement;
 import io.github.lucasduete.mobileHubApi.services.implementations.UserService;
 import io.github.lucasduete.mobileHubApi.services.interfaces.UserServiceInterface;
+import io.github.lucasduete.mobileHubApi.utils.AtomConsumer;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
 import javax.json.Json;
@@ -19,7 +21,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.List;
 
 @Path("user")
 public class UserController {
@@ -63,7 +68,7 @@ public class UserController {
     @POST
     @Path("feed")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-//    @Produces(MediaType.APPLICATION_ATOM_XML)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getFeed(@FormParam("username") String username, @FormParam("password") String password) {
 
         if (username == null || username.isEmpty() || password == null || password.isEmpty())
@@ -87,15 +92,16 @@ public class UserController {
         String jsonString = response.readEntity(String.class);
         JsonObject jsonObject = Json.createReader(new StringReader(jsonString)).readObject();
 
-        response = ClientBuilder
-                .newClient()
-                .target(jsonObject.getString("current_user_url"))
-                .request()
-                .get();
+        List<Feed> userFeed = Collections.emptyList();
 
-        System.out.println(response);
+        try {
+            userFeed = new AtomConsumer().consume(jsonObject.getString("current_user_url"));
+        } catch (Exception ex) {
+            if (!ex.getMessage().contains("Entity input stream has already been closed."))
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
 
-        return response;
+        return Response.ok(userFeed).build();
     }
 
 }

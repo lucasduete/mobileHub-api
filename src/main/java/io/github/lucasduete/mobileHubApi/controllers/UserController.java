@@ -1,19 +1,25 @@
 package io.github.lucasduete.mobileHubApi.controllers;
 
+import io.github.lucasduete.mobileHubApi.MyApplication;
 import io.github.lucasduete.mobileHubApi.infraSecurity.Security;
 import io.github.lucasduete.mobileHubApi.infraSecurity.TokenManagement;
 import io.github.lucasduete.mobileHubApi.services.implementations.UserService;
 import io.github.lucasduete.mobileHubApi.services.interfaces.UserServiceInterface;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.ws.rs.*;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.io.IOException;
+import java.io.StringReader;
+import java.util.Base64;
 
 @Path("user")
 public class UserController {
@@ -52,6 +58,44 @@ public class UserController {
             ex.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @POST
+    @Path("feed")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+//    @Produces(MediaType.APPLICATION_ATOM_XML)
+    public Response getFeed(@FormParam("username") String username, @FormParam("password") String password) {
+
+        if (username == null || username.isEmpty() || password == null || password.isEmpty())
+            return Response.status(Response.Status.BAD_REQUEST).build();
+
+        HttpAuthenticationFeature authenticationFeature = HttpAuthenticationFeature.basic(username, password);
+
+        Response response = ClientBuilder
+                .newBuilder()
+                .register(authenticationFeature)
+                .build()
+                .target(MyApplication.URL_BASE)
+                .path("feeds")
+                .request()
+                .get();
+
+
+        if (response.getStatus() == Response.Status.UNAUTHORIZED.getStatusCode())
+            return response;
+
+        String jsonString = response.readEntity(String.class);
+        JsonObject jsonObject = Json.createReader(new StringReader(jsonString)).readObject();
+
+        response = ClientBuilder
+                .newClient()
+                .target(jsonObject.getString("current_user_url"))
+                .request()
+                .get();
+
+        System.out.println(response);
+
+        return response;
     }
 
 }

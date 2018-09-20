@@ -29,17 +29,13 @@ public class AtomConsumer {
 
         for (SyndEntry entry : (List<SyndEntry>) feed.getEntries()) {
 
-            Feed feedData = new Feed();
-
-            feedData.setTitle(entry.getTitle());
-
             SyndContentImpl content = (SyndContentImpl) entry.getContents().get(0);
             String contentValue = content.getValue();
 
             String avatar = contentValue.split("<img class=\"avatar\" src=\"")[1];
             avatar = avatar.split("\"")[0];
 
-            feedData.setAvatarUrl(avatar);
+            feedList.add(new Feed(entry.getTitle(), avatar));
         }
 
         return Collections.unmodifiableList(feedList);

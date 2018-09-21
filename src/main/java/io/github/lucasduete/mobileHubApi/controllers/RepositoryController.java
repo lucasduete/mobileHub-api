@@ -48,7 +48,6 @@ public class RepositoryController {
 
     @GET
     @Path("stars")
-    @Security
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMyStars(@QueryParam("token") String token) {
 

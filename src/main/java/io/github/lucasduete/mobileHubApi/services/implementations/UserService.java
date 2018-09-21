@@ -29,12 +29,23 @@ public class UserService implements UserServiceInterface {
     @Override
     public User getProfile(String token) throws IOException {
 
-        Response response = target
-                .path("user")
-                .request()
-                .header("Accept", "application/json, application/vnd.github.v3+json")
-                .header("Authorization", String.format("bearer %s", token))
-                .get();
+        Response response = null;
+
+        if (token.endsWith("=")) {
+            response = target
+                    .path("user")
+                    .request()
+                    .header("Accept", "application/json, application/vnd.github.v3+json")
+                    .header("Authorization", String.format("Basic %s", token))
+                    .get();
+        } else {
+            response = target
+                    .path("user")
+                    .request()
+                    .header("Accept", "application/json, application/vnd.github.v3+json")
+                    .header("Authorization", String.format("Bearer %s", token))
+                    .get();
+        }
 
         return recuperarUsuario(response);
     }

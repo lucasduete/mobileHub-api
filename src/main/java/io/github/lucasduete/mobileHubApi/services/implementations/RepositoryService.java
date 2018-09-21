@@ -47,13 +47,25 @@ public class RepositoryService implements RepositoryServiceInterface {
     @Override
     public List<Repository> getMyRepos(String token) throws IOException {
 
-        Response response = target
-                .path("user")
-                .path("repos")
-                .request()
-                .header("Accept", "application/json, application/vnd.github.v3+json")
-                .header("Authorization", String.format("bearer %s", token))
-                .get();
+        Response response = null;
+
+        if (token.endsWith("=")) {
+            response = target
+                    .path("user")
+                    .path("repos")
+                    .request()
+                    .header("Accept", "application/json, application/vnd.github.v3+json")
+                    .header("Authorization", String.format("Basic %s", token))
+                    .get();
+        } else {
+            response = target
+                    .path("user")
+                    .path("repos")
+                    .request()
+                    .header("Accept", "application/json, application/vnd.github.v3+json")
+                    .header("Authorization", String.format("Bearer %s", token))
+                    .get();
+        }
 
         return recuperarRepositorios(response);
 
@@ -62,13 +74,25 @@ public class RepositoryService implements RepositoryServiceInterface {
     @Override
     public List<Repository> getMyStars(String token) throws IOException {
 
-        Response response = target
-                .path("user")
-                .path("starred")
-                .request()
-                .header("Accept", "application/json, application/vnd.github.v3+json")
-                .header("Authorization", String.format("bearer %s", token))
-                .get();
+        Response response = null;
+
+        if (token.endsWith("=")) {
+            response = target
+                    .path("user")
+                    .path("starred")
+                    .request()
+                    .header("Accept", "application/json, application/vnd.github.v3+json")
+                    .header("Authorization", String.format("Basic %s", token))
+                    .get();
+        } else {
+            response = target
+                    .path("user")
+                    .path("starred")
+                    .request()
+                    .header("Accept", "application/json, application/vnd.github.v3+json")
+                    .header("Authorization", String.format("Bearer %s", token))
+                    .get();
+        }
 
         return recuperarRepositorios(response);
 

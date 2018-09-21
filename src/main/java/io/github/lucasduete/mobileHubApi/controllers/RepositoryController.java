@@ -1,15 +1,12 @@
 package io.github.lucasduete.mobileHubApi.controllers;
 
 import io.github.lucasduete.mobileHubApi.infraSecurity.Security;
-import io.github.lucasduete.mobileHubApi.infraSecurity.TokenManagement;
 import io.github.lucasduete.mobileHubApi.services.implementations.RepositoryService;
 import io.github.lucasduete.mobileHubApi.services.interfaces.RepositoryServiceInterface;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 import java.io.IOException;
 
 @Path("repositories")
@@ -34,12 +31,10 @@ public class RepositoryController {
     }
 
     @GET
-    @Security
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMyRepos(@Context SecurityContext securityContext) {
+    public Response getMyRepos(@QueryParam("token") String token) {
 
         RepositoryServiceInterface repositoryService = new RepositoryService();
-        String token = TokenManagement.getToken(securityContext);
 
         try {
             return Response.ok(
@@ -55,10 +50,9 @@ public class RepositoryController {
     @Path("stars")
     @Security
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMyStars(@Context SecurityContext securityContext) {
+    public Response getMyStars(@QueryParam("token") String token) {
 
         RepositoryServiceInterface repositoryService = new RepositoryService();
-        String token = TokenManagement.getToken(securityContext);
 
         try {
             return Response.ok(
